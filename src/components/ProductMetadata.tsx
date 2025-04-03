@@ -22,7 +22,7 @@ export default function ProductMetadata({ product: initialProduct }: ProductMeta
         <div className="bg-white p-6 rounded-lg border">
           <div className="aspect-square relative">
             <img
-              src={`${product.images.length > 0 ? "http://localhost:4000/" + product.images[0].path : "/placeholder.svg"}`}
+              src={`${product.images.length > 0 ? import.meta.env.PUBLIC_API_URL + "/" + product.images[0].path : "/placeholder.svg"}`}
               alt={product.name}
               className="w-full h-full object-contain"
             />

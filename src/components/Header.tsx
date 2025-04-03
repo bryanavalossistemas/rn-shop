@@ -138,7 +138,13 @@ export default function Header({ products: initialProducts }: HeaderProps) {
                           }}
                         >
                           <div className="max-w-10 max-h-10 bg-gray-100 mr-3">
-                            <img className="rounded-md object-cover" src={"/placeholder.svg"} alt={product.name} />
+                            <img
+                              className="rounded-md object-cover"
+                              src={`${
+                                product.images.length > 0 ? import.meta.env.PUBLIC_API_URL + "/" + product.images[0].path : "/placeholder.svg"
+                              }`}
+                              alt={product.name}
+                            />
                           </div>
                           <div>
                             <div className="font-medium text-sm line-clamp-2">{product.name}</div>
@@ -193,7 +199,15 @@ export default function Header({ products: initialProducts }: HeaderProps) {
                       {$cart.map((item) => (
                         <div key={item.id} className="flex gap-4">
                           <div className="w-16 h-16 bg-muted rounded-md overflow-hidden">
-                            <img src={"/placeholder.svg"} alt={item.product.name} className="w-full h-full object-cover" />
+                            <img
+                              src={`${
+                                item.product.images.length > 0
+                                  ? import.meta.env.PUBLIC_API_URL + "/" + item.product.images[0].path
+                                  : "/placeholder.svg"
+                              }`}
+                              alt={item.product.name}
+                              className="w-full h-full object-cover"
+                            />
                           </div>
                           <div className="flex-1">
                             <h4 className="text-sm font-medium leading-tight">{item.product.name}</h4>

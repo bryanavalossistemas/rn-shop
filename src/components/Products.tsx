@@ -162,7 +162,7 @@ export default function ProductsPage({ products: initialProducts, categories }: 
                         </div>
                       )}
                       <img
-                        src={`${product.images.length > 0 ? "http://localhost:4000/" + product.images[0].path : "/placeholder.svg"}`}
+                        src={`${product.images.length > 0 ? import.meta.env.PUBLIC_API_URL + "/" + product.images[0].path : "/placeholder.svg"}`}
                         alt={product.name}
                         className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                       />

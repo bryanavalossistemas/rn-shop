@@ -37,7 +37,7 @@ export default function FeaturedProducts({ products: initialProducts }: Featured
             <Card className="h-full overflow-hidden transition-all duration-200 hover:shadow-md p-0">
               <div className="aspect-square relative overflow-hidden">
                 <img
-                  src={`${product.images.length > 0 ? "http://localhost:4000/" + product.images[0].path : "/placeholder.svg"}`}
+                  src={`${product.images.length > 0 ? import.meta.env.PUBLIC_API_URL + "/" + product.images[0].path : "/placeholder.svg"}`}
                   alt={product.name}
                   className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                   width={300}

@@ -43,7 +43,7 @@ export default function CarouselProducts({ products: initialProducts }: Carousel
                     <div className="relative w-full h-48 mb-4">
                       <div className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 text-sm font-bold rounded-bl-lg">SALE</div>
                       <img
-                        src={`${product.images.length > 0 ? "http://localhost:4000/" + product.images[0].path : "/placeholder.svg"}`}
+                        src={`${product.images.length > 0 ? import.meta.env.PUBLIC_API_URL + "/" + product.images[0].path : "/placeholder.svg"}`}
                         className="w-full h-full object-contain"
                       />
                     </div>

@@ -50,7 +50,7 @@ const products = ProductSchema.array().parse(await fetch(`${import.meta.env.API_
                   <CardContent className="p-4 flex flex-col items-center text-center">
                     <div class="w-16 h-16 flex items-center justify-center mb-3">
                       <img
-                        src={`${category.image ? "http://localhost:4000/" + category.image : "/placeholder.svg"}`}
+                        src={`${category.image ? import.meta.env.PUBLIC_API_URL + "/" + category.image : "/placeholder.svg"}`}
                         alt={category.name}
                         class="max-w-full max-h-full"
                         width="64"
