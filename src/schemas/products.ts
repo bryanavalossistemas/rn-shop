@@ -3,7 +3,7 @@ import { z } from "zod";
 export const ProductSchema = z.object({
   id: z.number().int(),
   name: z.string(),
-  description: z.string(),
+  description: z.string().nullable(),
   category: z.object({
     id: z.number().int(),
     name: z.string(),

@@ -58,7 +58,7 @@ export default function Header({ products: initialProducts }: HeaderProps) {
         .filter((p) => p.showInEcommerce)
         .filter(
           (product) =>
-            product.name.toLowerCase().includes(searchQuery.toLowerCase()) || product.description.toLowerCase().includes(searchQuery.toLowerCase())
+            product.name.toLowerCase().includes(searchQuery.toLowerCase()) || product?.description?.toLowerCase().includes(searchQuery.toLowerCase())
         )
         .slice(0, 5); // Limit to 5 results
       setSearchResults(filtered);

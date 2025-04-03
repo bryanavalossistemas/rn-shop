@@ -53,7 +53,7 @@ export default function ProductsPage({ products: initialProducts, categories }: 
     .filter((p) => p.showInEcommerce)
     .filter((product) => {
       const matchesSearch =
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) || product.description.toLowerCase().includes(searchTerm.toLowerCase());
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) || product?.description?.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category.name);
       const matchesPrice = product.ecommerceSalePrice >= priceRange[0] && product.ecommerceSalePrice <= priceRange[1];
 
