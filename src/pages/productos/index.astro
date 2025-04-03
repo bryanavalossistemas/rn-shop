@@ -5,8 +5,8 @@ import { ProductSchema } from "@/schemas/products";
 import Products from "@/components/Products";
 
 const pageTitle = "R&N | Home";
-const categories = CategorySchema.array().parse(await fetch(`${import.meta.env.PUBLIC_API_URL}/categories`).then((res) => res.json()));
-const products = ProductSchema.array().parse(await fetch(`${import.meta.env.PUBLIC_API_URL}/products`).then((res) => res.json()));
+const categories = CategorySchema.array().parse(await fetch(`${import.meta.env.API_URL}/categories`).then((res) => res.json()));
+const products = ProductSchema.array().parse(await fetch(`${import.meta.env.API_URL}/products`).then((res) => res.json()));
 ---
 
 <MainLayout content={{ title: pageTitle }}>
