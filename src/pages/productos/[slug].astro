@@ -6,7 +6,7 @@ import ProductMetadata from "@/components/ProductMetadata";
 import { ProductSchema } from "@/schemas/products";
 
 export async function getStaticPaths() {
-  const products = ProductSchema.array().parse(await fetch("http://localhost:4000/products").then((res) => res.json()));
+  const products = ProductSchema.array().parse(await fetch(`${import.meta.env.PUBLIC_API_URL}/products`).then((res) => res.json()));
   return products.map((product) => {
     return { params: { slug: generateSlug(product.name, product.id) } };
   });
