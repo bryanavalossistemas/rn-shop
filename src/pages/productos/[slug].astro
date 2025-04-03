@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const id = extractIdFromSlug(slug);
 const pageTitle = `Producto ${slug}`;
-const product = ProductSchema.parse(await fetch(`http://localhost:4000/products/${id}`).then((res) => res.json()));
+const product = ProductSchema.parse(await fetch(`${import.meta.env.API_URL}/${id}`).then((res) => res.json()));
 ---
 
 <MainLayout content={{ title: pageTitle }}>
