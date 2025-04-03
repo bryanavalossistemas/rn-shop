@@ -4,10 +4,12 @@ export const ProductSchema = z.object({
   id: z.number().int(),
   name: z.string(),
   description: z.string().nullable(),
-  category: z.object({
-    id: z.number().int(),
-    name: z.string(),
-  }),
+  category: z
+    .object({
+      id: z.number().int(),
+      name: z.string(),
+    })
+    .nullable(),
   stock: z.number().int(),
   showInEcommerce: z.boolean(),
   ecommercePercentageDiscount: z.number().int(),
