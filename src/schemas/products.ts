@@ -13,9 +13,6 @@ export const ProductSchema = z.object({
   ecommercePercentageDiscount: z.number().int(),
   ecommerceSalePrice: z.number(),
   images: z.array(z.object({ id: z.number().int(), path: z.string() })),
-  // stock: z.number().int(),
-  // brandId: z.number().int().nullable(),
-  // images: z.array(z.object({ id: z.number().int(), path: z.string() })).optional(),
 });
 
 export type Product = z.infer<typeof ProductSchema>;
