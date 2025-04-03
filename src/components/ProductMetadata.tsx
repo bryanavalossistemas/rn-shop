@@ -4,9 +4,9 @@ import { Star } from "lucide-react";
 import AddToCart from "@/components/AddToCart";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatCurrency } from "@/lib/utils";
-import { useProductUpdates } from "@/hooks/useProductSocket";
+import { io } from "socket.io-client";
 
 interface ProductMetadataProps {
   product: Product;
@@ -14,7 +14,38 @@ interface ProductMetadataProps {
 
 export default function ProductMetadata({ product: initialProduct }: ProductMetadataProps) {
   const [quantity, setQuantity] = useState(1);
-  const product = useProductUpdates(initialProduct);
+  const [product, setProduct] = useState<Product>(initialProduct);
+
+  useEffect(() => {
+    // 1. Fetch para datos actualizados al cargar
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/products/${product.id}`);
+        const data = await response.json();
+        setProduct(data);
+      } catch (error) {
+        console.error("Error al cargar el producto:", error);
+      }
+    };
+
+    fetchProduct();
+
+    // 2. WebSocket para actualizaciones en tiempo real
+    const socket = io(`${import.meta.env.PUBLIC_API_URL}/product-updates`);
+
+    socket.emit("subscribeToProduct", { productId: product.id });
+
+    const callBack = (updatedProduct: Product) => {
+      setProduct((prev) => ({ ...prev, ...updatedProduct }));
+    };
+
+    socket.on(`productUpdated:${product.id}`, callBack);
+
+    return () => {
+      socket.off(`productUpdated:${product.id}`, callBack);
+      socket.disconnect();
+    };
+  }, [product.id]);
 
   return (
     <>

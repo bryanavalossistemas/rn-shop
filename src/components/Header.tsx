@@ -22,25 +22,36 @@ export default function Header({ products: initialProducts }: HeaderProps) {
   const $cart = useStore(cart);
   const totalItems = $cart.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = $cart.reduce((sum, item) => sum + item.product.ecommerceSalePrice * item.quantity, 0);
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState<Product[]>(initialProducts);
 
   useEffect(() => {
-    const socket = io(`${import.meta.env.PUBLIC_API_URL}/product-updates`);
-
-    const handleProductUpdate = ({ id, changes }: { id: number; changes: Product }) => {
-      setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, ...changes } : p)));
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/products`);
+        if (!response.ok) throw new Error("Error en la API");
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    socket.on("productListUpdated", handleProductUpdate);
+    fetchProducts();
+
+    const socket = io(`${import.meta.env.PUBLIC_API_URL}/product-updates`);
+
+    socket.on("productListUpdated", ({ id, changes }: { id: number; changes: Product }) => {
+      setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, ...changes } : p)));
+    });
 
     return () => {
-      socket.off("productListUpdated", handleProductUpdate);
       socket.disconnect();
     };
   }, []);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
+
   useEffect(() => {
     if (searchQuery.trim().length > 1) {
       const filtered = products

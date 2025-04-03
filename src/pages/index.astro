@@ -10,6 +10,7 @@ import FeaturedProducts from "@/components/FeaturedProducts";
 const pageTitle = "R&N | Home";
 const categories = CategorySchema.array().parse(await fetch(`${import.meta.env.API_URL}/categories`).then((res) => res.json()));
 const products = ProductSchema.array().parse(await fetch(`${import.meta.env.API_URL}/products`).then((res) => res.json()));
+const staticProducts = ProductSchema.array().parse(await fetch(`${import.meta.env.API_URL}/products`).then((res) => res.json()));
 ---
 
 <MainLayout content={{ title: pageTitle }}>
@@ -77,7 +78,7 @@ const products = ProductSchema.array().parse(await fetch(`${import.meta.env.API_
             <p class="mx-auto max-w-[700px] text-gray-700 md:text-xl">Consulta nuestras mejores ofertas y novedades.</p>
           </div>
         </div>
-        <FeaturedProducts client:load products={products} />
+        <FeaturedProducts client:load products={staticProducts} />
         <div class="flex justify-center mt-10">
           <a href="/productos">
             <Button variant="outline" className="border-green-600 text-green-600 hover:bg-green-50"> Ver todos los productos</Button>

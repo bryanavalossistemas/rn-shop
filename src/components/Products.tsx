@@ -18,19 +18,29 @@ interface ProductsPageProps {
 }
 
 export default function ProductsPage({ products: initialProducts, categories }: ProductsPageProps) {
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState<Product[]>(initialProducts);
 
   useEffect(() => {
-    const socket = io(`${import.meta.env.PUBLIC_API_URL}/product-updates`);
-
-    const handleProductUpdate = ({ id, changes }: { id: number; changes: Product }) => {
-      setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, ...changes } : p)));
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/products`);
+        if (!response.ok) throw new Error("Error en la API");
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    socket.on("productListUpdated", handleProductUpdate);
+    fetchProducts();
+
+    const socket = io(`${import.meta.env.PUBLIC_API_URL}/product-updates`);
+
+    socket.on("productListUpdated", ({ id, changes }: { id: number; changes: Product }) => {
+      setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, ...changes } : p)));
+    });
 
     return () => {
-      socket.off("productListUpdated", handleProductUpdate);
       socket.disconnect();
     };
   }, []);
