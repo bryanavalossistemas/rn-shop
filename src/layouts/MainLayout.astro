@@ -1,0 +1,23 @@
+---
+import "../styles/global.css";
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header";
+import { ProductSchema } from "@/schemas/products";
+
+const { content } = Astro.props;
+const products = ProductSchema.array().parse(await fetch("http://localhost:4000/products").then((res) => res.json()));
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{content.title}</title>
+  </head>
+  <body class="relative flex min-h-screen flex-col">
+    <Header client:load products={products} />
+    <main class="flex-1"><slot /></main>
+    <Footer />
+  </body>
+</html>

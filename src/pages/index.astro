@@ -1,0 +1,104 @@
+---
+import { Button } from "@/components/ui/button";
+import CarouselProducts from "@/components/CarouselProducts";
+import MainLayout from "@/layouts/MainLayout.astro";
+import { CategorySchema } from "@/schemas/categories";
+import { ProductSchema } from "@/schemas/products";
+import { Card, CardContent } from "@/components/ui/card";
+import FeaturedProducts from "@/components/FeaturedProducts";
+
+const pageTitle = "R&N | Home";
+const categories = CategorySchema.array().parse(await fetch("http://localhost:4000/categories").then((res) => res.json()));
+const products = ProductSchema.array().parse(await fetch("http://localhost:4000/products").then((res) => res.json()));
+---
+
+<MainLayout content={{ title: pageTitle }}>
+  <div class="flex flex-col min-h-screen">
+    {/* Hero Section */}
+    <section class="w-full py-12 md:py-24 lg:py-32 bg-[url('/placeholder.svg')] bg-cover bg-center">
+      <div class="container px-4 md:px-6">
+        <div class="flex flex-col items-center space-y-4 text-center max-w-3xl mx-auto bg-white/80 p-6 rounded-lg">
+          <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl text-green-700">
+            Alimentos frescos entregados a su puerta
+          </h1>
+          <p class="mx-auto max-w-[700px] text-gray-700 md:text-xl">
+            Compre nuestra amplia selección de productos frescos, productos básicos de despensa y artículos esenciales para el hogar.
+          </p>
+          <div class="space-x-4">
+            <a href="/productos">
+              <Button client:load className="bg-green-600 hover:bg-green-700"> Compra ahora</Button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Categories Section */}
+    <section class="w-full py-12 md:py-24 bg-gray-50">
+      <div class="container px-4 md:px-6">
+        <div class="flex flex-col items-center justify-center space-y-4 text-center">
+          <div class="space-y-2">
+            <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-green-700">Comprar por categoría</h2>
+            <p class="mx-auto max-w-[700px] text-gray-700 md:text-xl">Explora nuestros departamentos y encuentra exactamente lo que necesitas.</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-8">
+          {
+            categories.map((category) => (
+              <a href={`/products?category=${category.id}`}>
+                <Card className="overflow-hidden transition-all duration-200 hover:shadow-md p-0">
+                  <CardContent className="p-4 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 flex items-center justify-center mb-3">
+                      <img
+                        src={`${category.image ? "http://localhost:4000/" + category.image : "/placeholder.svg"}`}
+                        alt={category.name}
+                        class="max-w-full max-h-full"
+                        width="64"
+                        height="64"
+                        loading="lazy"
+                      />
+                    </div>
+                    <h3 class="font-medium">{category.name}</h3>
+                  </CardContent>
+                </Card>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    {/* Featured Products Section */}
+    <section class="w-full py-12 md:py-24">
+      <div class="container px-4 md:px-6">
+        <div class="flex flex-col items-center justify-center space-y-4 text-center">
+          <div class="space-y-2">
+            <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-green-700">Productos destacados</h2>
+            <p class="mx-auto max-w-[700px] text-gray-700 md:text-xl">Consulta nuestras mejores ofertas y novedades.</p>
+          </div>
+        </div>
+        <FeaturedProducts client:load products={products} />
+        <div class="flex justify-center mt-10">
+          <a href="/productos">
+            <Button variant="outline" className="border-green-600 text-green-600 hover:bg-green-50"> Ver todos los productos</Button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {/* Deals Section */}
+    <section class="w-full py-12 md:py-24 bg-green-50">
+      <div class="container px-4 md:px-6">
+        <div class="flex flex-col items-center justify-center space-y-4 text-center">
+          <div class="space-y-2">
+            <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-green-700">Ofertas Semanales</h2>
+            <p class="mx-auto max-w-[700px] text-gray-700 md:text-xl">Ahorre a lo grande con estas ofertas por tiempo limitado.</p>
+          </div>
+        </div>
+        <div class="mt-8">
+          <CarouselProducts client:load products={products} />
+        </div>
+      </div>
+    </section>
+  </div>
+</MainLayout>

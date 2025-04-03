@@ -1,0 +1,30 @@
+---
+import { ChevronLeft } from "lucide-react";
+import { extractIdFromSlug, generateSlug } from "@/lib/utils";
+import MainLayout from "@/layouts/MainLayout.astro";
+import ProductMetadata from "@/components/ProductMetadata";
+import { ProductSchema } from "@/schemas/products";
+
+export async function getStaticPaths() {
+  const products = ProductSchema.array().parse(await fetch("http://localhost:4000/products").then((res) => res.json()));
+  return products.map((product) => {
+    return { params: { slug: generateSlug(product.name, product.id) } };
+  });
+}
+
+const { slug } = Astro.params;
+const id = extractIdFromSlug(slug);
+const pageTitle = `Producto ${slug}`;
+const product = ProductSchema.parse(await fetch(`http://localhost:4000/products/${id}`).then((res) => res.json()));
+---
+
+<MainLayout content={{ title: pageTitle }}>
+  <div class="container px-4 py-8 md:px-6 md:py-12">
+    <a href="/productos" class="inline-flex items-center text-green-600 hover:text-green-700 mb-6">
+      <ChevronLeft className="h-4 w-4 mr-1" />
+      Volver a Productos
+    </a>
+
+    <ProductMetadata client:load product={product} />
+  </div>
+</MainLayout>
